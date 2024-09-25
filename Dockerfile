@@ -20,6 +20,12 @@ FROM base as build
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libmagickwand-dev \
+    imagemagick=8:6.9.3-10+deb8u7
+
 # Install node modules
 COPY --link package-lock.json package.json ./
 RUN npm ci
