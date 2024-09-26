@@ -21,10 +21,9 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
+RUN apt-get install -y \
     libmagickwand-dev \
-    imagemagick=8:6.9.3-10+deb8u7
+    imagemagick
 
 # Install node modules
 COPY --link package-lock.json package.json ./
