@@ -36,25 +36,33 @@ app.post("/image-upload", upload.single("avatar"), (req, res) => {
   console.log("file is", req.file.path);
   try {
     // const __dirname = path.resolve();
-    const filePath = path.join(__dirname, req.file.path);
+    const filePath = path.join(__dirname, "../", req.file.path);
     console.log(filePath);
     const outputFilePath = path.join(
       __dirname,
-      "uploads",
+      "../uploads",
       `output_${req.file.filename}`
     );
     // Vulnerable ImageMagick `convert` command
-    exec(
-      `magick ~${filePath} ${outputFilePath}`,
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error: ${error.message}`);
-          return res.status(500).send("Server error during image processing");
-        }
-
-        res.send(`Image processed and saved as ${outputFilePath}`);
+    const IMcommand = `magick ${filePath} ${outputFilePath}`;
+    exec(IMcommand, (error, stdout, stderr) => {
+      console.log("running", IMcommand);
+      if (error) {
+        console.error(
+          `Ran "${IMcommand}" \n Error: ${error.message} - ${stderr}`
+        );
+        return res
+          .status(500)
+          .send(
+            `Ran "${IMcommand}" \n Server error during image processing - ${stderr}`
+          );
       }
-    );
+      res
+        .status(200)
+        .send(
+          `Ran "${IMcommand}" \n ${stdout} - Image processed and saved as ${outputFilePath}`
+        );
+    });
   } catch (e) {
     console.log(e);
     return res.status(500).send("Server error during image processing");
