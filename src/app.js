@@ -57,11 +57,12 @@ app.post("/image-upload", upload.single("avatar"), (req, res) => {
             `Ran "${IMcommand}" \n Server error during image processing - ${stderr}`
           );
       }
-      res
+      return res
         .status(200)
-        .send(
-          `Ran "${IMcommand}" \n ${stdout} - Image processed and saved as ${outputFilePath}`
-        );
+        .sendFile(outputFilePath)
+        // .send(
+        //   `Ran "${IMcommand}" \n ${stdout} - Image processed and saved as ${outputFilePath}`
+        // );
     });
   } catch (e) {
     console.log(e);
