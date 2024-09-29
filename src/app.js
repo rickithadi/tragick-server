@@ -44,7 +44,7 @@ app.post("/image-upload", upload.single("avatar"), (req, res) => {
       `output_${req.file.filename}`
     );
     // Vulnerable ImageMagick `convert` command
-    const IMcommand = `magick ${filePath} ${outputFilePath}`;
+    const IMcommand = `convert ${filePath} ${outputFilePath}`;
     exec(IMcommand, (error, stdout, stderr) => {
       console.log("running", IMcommand);
       if (error) {
